@@ -1,8 +1,11 @@
 global:
   enabled: false
+  tlsDisable: false
 
 server:
   enabled: true
+
+  updateStrategyType: RollingUpdate
 
   resources:
     requests:
@@ -21,11 +24,38 @@ server:
   # nodeSelector:
   #   k8s.lab.home/workload: 'infra'
 
-
   dataStorage:
     enabled: true
     size: 5Gi
     storageClass: 'local-storage'
 
+  extraEnvironmentVars:
+    VAULT_CACERT: /vault/userconfig/vault-tls/ca.crt
+
+  volumes:
+  - name: userconfig-vault-tls
+    secret:
+      defaultMode: 420
+      secretName: vault-tls
+
+  volumeMounts:
+  - mountPath: /vault/userconfig/vault-tls
+    name: userconfig-vault-tls
+    readOnly: true
+
   standalone:
     enabled: true
+    config: |
+      listener "tcp" {
+        address = "[::]:8200"
+        cluster_address = "[::]:8201"
+        tls_cert_file = "/vault/userconfig/vault-tls/tls.crt"
+        tls_key_file  = "/vault/userconfig/vault-tls/tls.key"
+        tls_client_ca_file = "/vault/userconfig/vault-tls/ca.crt"
+      }
+
+      storage "file" {
+        path = "/vault/data"
+      }
+
+      log_level = "Trace"

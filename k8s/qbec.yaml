@@ -8,6 +8,11 @@ spec:
     lab:
       server: https://lab.home:6443
   vars: 
+    topLevel:
+    - name: bootstrap
+      components: ['vault']
+
+
     external:
     - name: workDir
       default: '/Users/ericz/Documents/work'
