@@ -1,3 +1,5 @@
+# K3d
+
 Running k3d on rootless docker.
 
 First setup Docker to run [rootless](https://docs.docker.com/engine/security/rootless/).
@@ -19,3 +21,8 @@ Following  instructions [here](https://github.com/k3s-io/k3s/issues/2054#issueco
 Following
 * https://github.com/nestybox/sysbox/issues/70
 
+
+
+# Containerd rootless
+
+`nerdctl` unable to spin up container images with container networks. Had to change the `backend` in the cni config to `iptables` from `firewalld`.
