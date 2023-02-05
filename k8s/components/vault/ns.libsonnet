@@ -3,8 +3,5 @@
   kind: 'Namespace',
   metadata: {
     name: 'vault',
-    labels: {
-      name: 'vault',
-    },
   },
 }

@@ -6,7 +6,7 @@ spec:
   clusterScopedLists: true
   environments:
     lab:
-      server: https://lab.home:6443
+      server: https://k3s.lab.home:6443
   vars: 
     topLevel:
     - name: bootstrap
@@ -33,11 +33,18 @@ spec:
       code: |
         {
           command: './scripts/expand-helm.sh',
-          args: [ std.thisFile ],
           inheritEnv: true,
         }
+    - name: getCA
+      code: |
+        {
+          command: './scripts/get-ca.sh',
+          inheritEnv: true,
+        }
+
 
   dataSources:
   - exec://import-tls?configVar=importTLS
   - exec://import-ssh?configVar=importSSH
   - exec://expand-helm?configVar=expandHelm
+  - exec://get-ca?configVar=getCA

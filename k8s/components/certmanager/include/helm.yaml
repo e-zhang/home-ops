@@ -6,14 +6,7 @@ installCRDs: true
 
 namespace: 'certmanager'
 
-nodeSeelector:
-  k8s.lab.home/workload: 'infra'
-
-tolerations:
-- key: 'trust'
-  operator: 'Equal'
-  value: 'high'
-  effect: 'NoExecute'
-
 prometheus:
   enabled: false
+
+clusterResourceNamespace: 'cert-issuers'
