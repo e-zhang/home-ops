@@ -1,0 +1,10 @@
+tls-san:
+  - "k3s.lab.home"
+selinux: true
+secrets-encryption: true
+node-name: lab
+kubelet-arg:
+  - --root-dir=/home/home/Documents/work/k3s/kubelet
+disable:
+- local-storage
+- traefik
