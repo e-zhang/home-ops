@@ -46,7 +46,8 @@ resource "vault_pki_secret_backend_intermediate_cert_request" "lab_cert" {
   backend      = vault_mount.pki-lab.path
   type         = "internal"
   common_name  = "Lab intermediate CA"
-  key_type     = "ed25519"
+  key_type     = "rsa"
+  key_bits     = "2048"
   ou           = "lab intermediate"
   organization = "EZ Homelab"
   country      = "US"

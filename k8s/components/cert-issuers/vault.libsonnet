@@ -1,7 +1,7 @@
 local ca = importstr 'data://get-ca/vault/vault-tls';
 
 
-local issuer = function(name)
+local issuer = function(name, role)
   [
     {
       apiVersion: 'v1',
@@ -33,7 +33,7 @@ local issuer = function(name)
       },
       spec: {
         vault: {
-          path: 'pki/v2023/lab/v2023/sign/lab-internal-role',
+          path: 'pki/v2023/lab/v2023/sign/' + role,
           server: 'https://vault.vault.svc.cluster.local:8200',
           caBundle: ca,
           auth: {
@@ -51,4 +51,4 @@ local issuer = function(name)
     },
   ];
 
-issuer('internal-issuer') + issuer('ingress-issuer')
+issuer('internal-issuer', 'lab-internal-role') + issuer('ingress-issuer', 'lab-ingress-role')
