@@ -46,6 +46,8 @@ server:
   standalone:
     enabled: true
     config: |
+      ui = true
+
       listener "tcp" {
         address = "[::]:8200"
         cluster_address = "[::]:8201"
@@ -74,3 +76,4 @@ server:
       - secretName: vault-ingress-tls
         hosts:
           - vault.lab.home
+
