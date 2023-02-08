@@ -1,3 +1,3 @@
 provider "vault" {
-  address = "http://localhost:8200"
+  address = var.bootstrap ? "http://localhost:8200" : ""
 }

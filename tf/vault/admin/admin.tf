@@ -5,6 +5,11 @@ resource "vault_policy" "admin_policy" {
 
 resource "vault_auth_backend" "userpass" {
   type = "userpass"
+
+  tune {
+    default_lease_ttl = "2h"
+    max_lease_ttl     = "4h"
+  }
 }
 
 resource "vault_generic_endpoint" "admin_user" {
