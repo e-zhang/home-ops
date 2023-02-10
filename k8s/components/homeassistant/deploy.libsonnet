@@ -21,9 +21,9 @@ local git_sync =
         value: 'ssh -i /.ssh/ssh-privatekey -o UserKnownHostsFile=/.ssh/known_hosts',
       },
     ],
+    command: ['/bin/sh', '-c'],
     args: [
-      'pull',
-      '-v',
+      'git pull || git clone git@github.com:e-zhang/homeassistant-config.git',
     ],
   };
 

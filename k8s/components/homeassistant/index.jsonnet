@@ -3,7 +3,6 @@ local ingress = import './ingress.libsonnet';
 local ns = import './ns.libsonnet';
 local pvc = import './pvc.libsonnet';
 local ssh = import './ssh.libsonnet';
-local tls = import './tls.libsonnet';
 
 
 local merge(arr, o) =
@@ -21,5 +20,4 @@ std.foldl(merge, [
   ingress,
   pvc,
   ssh,
-  tls,
 ], [])

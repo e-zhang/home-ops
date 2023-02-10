@@ -17,12 +17,6 @@ spec:
     - name: workDir
       default: '/Users/ericz/Documents/work'
     computed:
-    - name: importTLS
-      code: |
-        {
-          command: './scripts/import-tls.sh',
-          args: [ std.extVar('workDir') ]
-        }
     - name: importSSH
       code: |
         {
@@ -44,7 +38,6 @@ spec:
 
 
   dataSources:
-  - exec://import-tls?configVar=importTLS
   - exec://import-ssh?configVar=importSSH
   - exec://expand-helm?configVar=expandHelm
   - exec://get-ca?configVar=getCA

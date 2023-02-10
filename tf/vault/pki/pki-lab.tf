@@ -24,7 +24,7 @@ resource "vault_pki_secret_backend_role" "lab-ingress-role" {
   province     = ["WA"]
 }
 
-resource "vault_pki_secret_backend_role" "lab-interal-role" {
+resource "vault_pki_secret_backend_role" "lab-internal-role" {
   backend = vault_mount.pki-lab.path
   name    = "lab-internal-role"
   max_ttl = vault_mount.pki-lab.max_lease_ttl_seconds
@@ -63,22 +63,3 @@ resource "vault_pki_secret_backend_intermediate_set_signed" "lab_signed_cert" {
   certificate = file("${var.signed_cert_file}")
 }
 
-resource "vault_policy" "ingress_issuer_policy" {
-  name = "ingress_issuer_policy"
-
-  policy = <<EOF
-path "pki/+/lab/+/sign/lab-ingress-role" {
-  capabilities = ["create", "update"]
-}
-EOF
-}
-
-resource "vault_policy" "internal_issuer_policy" {
-  name = "internal_issuer_policy"
-
-  policy = <<EOF
-path "pki/+/lab/+/sign/lab-internal-role" {
-  capabilities = ["create", "update"]
-}
-EOF
-}

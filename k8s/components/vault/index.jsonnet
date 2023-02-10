@@ -1,4 +1,4 @@
-local cert = import 'certificate.libsonnet';
+local certs = import 'certificates.libsonnet';
 local helm = import 'helm.libsonnet';
 local httpproxy = import 'httpproxy.libsonnet';
 local ns = import 'ns.libsonnet';
@@ -9,6 +9,5 @@ function(bootstrap='false')
   [
     pv,
     ns,
-    cert,
     httpproxy,
-  ] + helm.render(bootstrap == 'true')
+  ] + helm.render(bootstrap == 'true') + certs

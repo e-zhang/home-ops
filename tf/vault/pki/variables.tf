@@ -9,6 +9,7 @@ variable "k8s_svc" {
   type        = list(string)
   default = [
     "vault",
+    "vault-agent-injector-svc",
     "contour",
     "envoy",
   ]

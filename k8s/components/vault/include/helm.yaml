@@ -76,4 +76,12 @@ server:
       - secretName: vault-ingress-tls
         hosts:
           - vault.lab.home
-
+injector:
+  enabled: true
+  leaderElector:
+    enabled: false
+  certs:
+    secretName: injector-tls
+  webhook:
+    annotations:
+      cert-manager.io/inject-ca-from: vault/injector-certificate
