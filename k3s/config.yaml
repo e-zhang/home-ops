@@ -3,8 +3,17 @@ tls-san:
 selinux: true
 secrets-encryption: true
 node-name: lab
+servicelb-namespace: servicelb
 kubelet-arg:
   - --root-dir=/home/home/Documents/work/k3s/kubelet
+kube-apiserver-arg:
+  - --oidc-issuer-url=https://vault.lab.home:8443/v1/identity/oidc/provider/lab-oidc-provider
+  - --oidc-client-id=igAfsY66VZOIc9MyF9BkKUaEpytZb87T
+  - --oidc-groups-claim=groups
+  - "--oidc-groups-prefix=oidc:"
+  - --oidc-username-claim=username
+  - "--oidc-username-prefix=oidc:"
+  - --oidc-ca-file=/home/home/Documents/work/k3s/labCA.crt
 disable:
 - local-storage
 - traefik
