@@ -84,4 +84,4 @@ injector:
     secretName: injector-tls
   webhook:
     annotations:
-      cert-manager.io/inject-ca-from: vault/injector-certificate
+      cert-manager.io/inject-ca-from: vault/injector-tls

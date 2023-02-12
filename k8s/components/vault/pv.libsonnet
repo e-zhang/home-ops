@@ -33,19 +33,6 @@
           },
         ],
       },
-      // required: {
-      //   nodeSelectorTerms: [
-      //     {
-      //       matchExpressions: [
-      //         {
-      //           key: 'k8s.lab.home/workload',
-      //           operator: 'In',
-      //           values: ['infra'],
-      //         },
-      //       ],
-      //     },
-      //   ],
-      // },
     },
   },
 }

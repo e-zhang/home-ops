@@ -12,17 +12,11 @@ spec:
     - name: bootstrap
       components: ['vault']
 
-
     external:
     - name: workDir
       default: '/Users/ericz/Documents/work'
+
     computed:
-    - name: importSSH
-      code: |
-        {
-          command: './scripts/import-ssh.sh',
-          args: [ std.extVar('workDir') ]
-        }
     - name: expandHelm
       code: |
         {
@@ -33,11 +27,10 @@ spec:
       code: |
         {
           command: './scripts/get-ca.sh',
-          inheritEnv: true,
+          args: [ std.extVar('workDir') ]
         }
 
 
   dataSources:
-  - exec://import-ssh?configVar=importSSH
   - exec://expand-helm?configVar=expandHelm
   - exec://get-ca?configVar=getCA

@@ -1,4 +1,4 @@
-local ca = importstr 'data://get-ca/vault/vault-tls';
+local ca = std.base64(importstr 'data://get-ca/out/Lab_Root.crt');
 
 
 local issuer = function(name, role)

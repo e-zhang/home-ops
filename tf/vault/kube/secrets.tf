@@ -10,8 +10,11 @@ resource "vault_policy" "secret_policy" {
   name = "${each.key}_secret_policy"
 
   policy = <<EOF
-path "secrets/${each.key}/*" {
+path "secrets/data/${each.key}/*" {
   capabilities = ["read"]
+}
+path "secrets/metadata/${each.key}/*" {
+  capabilities = ["list", "read"]
 }
 EOF
 }

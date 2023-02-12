@@ -5,11 +5,6 @@ local git_sync =
     name: 'git-init',
     volumeMounts: [
       {
-        name: 'ssh',
-        mountPath: '/.ssh/',
-        readOnly: true,
-      },
-      {
         name: 'config',
         mountPath: '/config',
       },
@@ -18,12 +13,12 @@ local git_sync =
     env: [
       {
         name: 'GIT_SSH_COMMAND',
-        value: 'ssh -i /.ssh/ssh-privatekey -o UserKnownHostsFile=/.ssh/known_hosts',
+        value: 'ssh -i /vault/secrets/ssh-privatekey -o "StrictHostKeyChecking no"',
       },
     ],
     command: ['/bin/sh', '-c'],
     args: [
-      'git pull || git clone git@github.com:e-zhang/homeassistant-config.git',
+      'git pull || git clone git@github.com:e-zhang/homeassistant-config.git .',
     ],
   };
 
@@ -48,6 +43,22 @@ local deploy = {
       metadata: {
         labels: {
           app: 'homeassistant',
+        },
+        annotations: {
+          'vault.hashicorp.com/tls-secret': 'lab-ca',
+          'vault.hashicorp.com/ca-cert': '/vault/tls/ca.crt',
+          'vault.hashicorp.com/role': 'homeassistant-secrets-role',
+          'vault.hashicorp.com/agent-inject': 'true',
+          'vault.hashicorp.com/agent-pre-populate-only': 'true',
+          'vault.hashicorp.com/agent-init-first': 'true',
+          'vault.hashicorp.com/agent-run-as-user': '1000',
+          'vault.hashicorp.com/agent-inject-perms-ssh-privatekey': '0600',
+          'vault.hashicorp.com/agent-inject-secret-ssh-privatekey': 'secrets/homeassistant/ssh',
+          'vault.hashicorp.com/agent-inject-template-ssh-privatekey': |||
+            {{- with secret "secrets/homeassistant/ssh" -}}
+            {{ .Data.data.privatekey }}
+            {{- end }}
+          |||,
         },
       },
       spec: {
@@ -88,12 +99,13 @@ local deploy = {
             ],
           },
         ],
+        serviceAccountName: 'homeassistant',
         restartPolicy: 'Always',
         volumes: [
           {
             name: 'config',
             persistentVolumeClaim: {
-              claimName: 'config',
+              claimName: 'config-pvc',
             },
           },
           {
@@ -102,16 +114,11 @@ local deploy = {
               path: '/etc/localtime',
             },
           },
-          {
-            name: 'ssh',
-            secret: {
-              secretName: 'ssh-key-git',
-            },
-          },
         ],
         securityContext: {
           runAsUser: 1000,
           runAsGroup: 1000,
+          fsGroup: 1000,
         },
       },
     },

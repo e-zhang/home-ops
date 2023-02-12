@@ -1,15 +1,5 @@
 [
   {
-    apiVersion: 'storage.k8s.io/v1',
-    kind: 'StorageClass',
-    metadata: {
-      name: 'local-storage',
-    },
-    provisioner: 'kubernetes.io/no-provisioner',
-    volumeBindingMode: 'WaitForFirstConsumer',
-    reclaimPolicy: 'Retain',
-  },
-  {
     apiVersion: 'networking.k8s.io/v1',
     kind: 'IngressClass',
     metadata: {
@@ -43,5 +33,12 @@
         name: 'oidc:kube_admins',
       },
     ],
+  },
+  {
+    apiVersion: 'v1',
+    kind: 'Namespace',
+    metadata: {
+      name: 'terraform',
+    },
   },
 ]

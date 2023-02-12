@@ -1,5 +1,5 @@
-local helm = import 'helm.libsonnet';
+local cert = import 'certmanager.libsonnet';
 local ns = import 'ns.libsonnet';
 
 
-[ns] + helm
+[ns] + cert
