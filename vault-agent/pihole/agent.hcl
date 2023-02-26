@@ -24,15 +24,19 @@ auto_auth {
 }
  
 cache {
- use_auto_auth_token = true
+  use_auto_auth_token = true
 }
  
 template {
- contents = <<EOF
+  contents = <<EOF
 {{ with pkiCert "pki/v2023/lab/v2023/issue/pihole-role" "common_name=raspberrypi.home" "alt_names=pi.hole"}}
 {{ .Data.Key }}
 {{ .Data.Cert }}
 {{ end }}
 EOF
- destination = "/home/pi/work/vault/certs/pihole.pem"
+  destination = "/home/pi/work/vault/certs/pihole.pem"
+
+  exec {
+    command = ["service", "lighttpd", "restart"]
+  }
 }

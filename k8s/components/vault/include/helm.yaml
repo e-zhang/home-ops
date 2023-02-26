@@ -4,9 +4,7 @@ global:
 
 server:
   enabled: true
-
   updateStrategyType: RollingUpdate
-
   resources:
     requests:
       memory: '2Gi'
@@ -14,7 +12,6 @@ server:
     limits:
       memory: '2Gi'
       cpu: 1
-
   # tolerations:
   #   - key: 'trust'
   #     operator: 'Equal'
@@ -23,7 +20,7 @@ server:
 
   # nodeSelector:
   #   k8s.lab.home/workload: 'infra'
-
+  #
   dataStorage:
     enabled: true
     size: 5Gi
@@ -33,15 +30,15 @@ server:
     VAULT_CACERT: /vault/userconfig/vault-tls/ca.crt
 
   volumes:
-  - name: userconfig-vault-tls
-    secret:
-      defaultMode: 420
-      secretName: vault-tls
+    - name: userconfig-vault-tls
+      secret:
+        defaultMode: 420
+        secretName: vault-tls
 
   volumeMounts:
-  - mountPath: /vault/userconfig/vault-tls
-    name: userconfig-vault-tls
-    readOnly: true
+    - mountPath: /vault/userconfig/vault-tls
+      name: userconfig-vault-tls
+      readOnly: true
 
   standalone:
     enabled: true
@@ -54,12 +51,14 @@ server:
         tls_cert_file = "/vault/userconfig/vault-tls/tls.crt"
         tls_key_file  = "/vault/userconfig/vault-tls/tls.key"
         tls_client_ca_file = "/vault/userconfig/vault-tls/ca.crt"
+
+        x_forwarded_for_authorized_addrs = "10.42.0.0/24,192.168.0.0/24"
+        x_forwarded_for_reject_not_present = "false"
       }
 
       storage "file" {
         path = "/vault/data"
       }
-
   service:
     annotations:
       projectcontour.io/upstream-protocol.tls: "8200"
@@ -76,6 +75,7 @@ server:
       - secretName: vault-ingress-tls
         hosts:
           - vault.lab.home
+
 injector:
   enabled: true
   leaderElector:
