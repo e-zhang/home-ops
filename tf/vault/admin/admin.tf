@@ -7,8 +7,8 @@ resource "vault_auth_backend" "userpass" {
   type = "userpass"
 
   tune {
-    default_lease_ttl = "4h"
-    max_lease_ttl     = "12h"
+    default_lease_ttl = "12h"
+    max_lease_ttl     = "24h"
   }
 }
 
