@@ -1,0 +1,25 @@
+[Unit]
+Description=Vault Agent
+
+# This unit is supposed to indicate when network functionality is available, but it is only
+# very weakly defined what that is supposed to mean, with one exception: at shutdown, a unit
+# that is ordered after network-online.target will be stopped before the network
+Wants=network-online.target
+After=network-online.target
+
+# A target that should be used as synchronization point for all host/network name service lookups.
+# All services for which the availability of full host/network name resolution is essential should
+# be ordered after this target, but not pull it in.
+Wants=nss-lookup.target
+Before=nss-lookup.target
+
+[Service]
+ExecStart=/usr/local/bin/vault agent -config=/home/pi/work/vault/agent/agent.hcl
+Restart=on-failure
+RestartSec=30s
+
+ProtectSystem=full
+ReadWriteDirectories=/home/pi/work/vault
+
+[Install]
+WantedBy=multi-user.target
