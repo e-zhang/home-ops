@@ -1,3 +1,38 @@
+local vault_annotations =
+  {
+    'vault.hashicorp.com/tls-secret': 'lab-ca',
+    'vault.hashicorp.com/ca-cert': '/vault/tls/ca.crt',
+    'vault.hashicorp.com/role': 'homeassistant-secrets-role',
+    'vault.hashicorp.com/agent-inject': 'true',
+    'vault.hashicorp.com/agent-pre-populate-only': 'true',
+    'vault.hashicorp.com/agent-init-first': 'true',
+    'vault.hashicorp.com/agent-run-as-user': '1000',
+    'vault.hashicorp.com/agent-copy-volume-mounts': 'git-init',
+  } +
+  // add ssh secrets
+  {
+    'vault.hashicorp.com/agent-inject-perms-ssh-privatekey': '0600',
+    'vault.hashicorp.com/agent-inject-secret-ssh-privatekey': 'secrets/homeassistant/ssh',
+    'vault.hashicorp.com/agent-inject-template-ssh-privatekey': |||
+      {{- with secret "secrets/homeassistant/ssh" -}}
+      {{ .Data.data.privatekey }}
+      {{- end }}
+    |||,
+  } +
+  // add mealie secrets
+  {
+    'vault.hashicorp.com/agent-inject-perms-mealie': '0600',
+    'vault.hashicorp.com/agent-inject-secret-mealie': 'secrets/homeassistant/mealie',
+    'vault.hashicorp.com/agent-inject-template-mealie': |||
+      {{- with secret "secrets/homeassistant/mealie" -}}
+      mealie_api_token: Bearer {{ .Data.data.api_token }}
+      {{- end }}
+    |||,
+    'vault.hashicorp.com/agent-inject-command-mealie': |||
+      ln -s /vault/secrets/mealie /config/packages/mealie/secrets.yaml
+    |||,
+  };
+
 local git_sync =
   {
     image: 'alpine/git:user',
@@ -44,22 +79,7 @@ local deploy = {
         labels: {
           app: 'homeassistant',
         },
-        annotations: {
-          'vault.hashicorp.com/tls-secret': 'lab-ca',
-          'vault.hashicorp.com/ca-cert': '/vault/tls/ca.crt',
-          'vault.hashicorp.com/role': 'homeassistant-secrets-role',
-          'vault.hashicorp.com/agent-inject': 'true',
-          'vault.hashicorp.com/agent-pre-populate-only': 'true',
-          'vault.hashicorp.com/agent-init-first': 'true',
-          'vault.hashicorp.com/agent-run-as-user': '1000',
-          'vault.hashicorp.com/agent-inject-perms-ssh-privatekey': '0600',
-          'vault.hashicorp.com/agent-inject-secret-ssh-privatekey': 'secrets/homeassistant/ssh',
-          'vault.hashicorp.com/agent-inject-template-ssh-privatekey': |||
-            {{- with secret "secrets/homeassistant/ssh" -}}
-            {{ .Data.data.privatekey }}
-            {{- end }}
-          |||,
-        },
+        annotations: vault_annotations,
       },
       spec: {
         initContainers: [
@@ -73,7 +93,7 @@ local deploy = {
             env: [
               {
                 name: 'TZ',
-                value: 'TZ=America/Los_Angeles',
+                value: 'America/Los_Angeles',
               },
               {
                 name: 'MPLCONFIGDIR',
